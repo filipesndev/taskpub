@@ -1,0 +1,46 @@
+.login {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    border: solid 1px rgb(200, 200, 200);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.box h1 {
+    text-align: center;
+    font-weight: 200;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.box button {
+    margin: 10px auto;
+    width: 100%;
+}
+
+.group {
+    margin-bottom: 10px;
+}
+
+.group label {
+    margin-left: 10px;
+}
+
+.group label, .group input {
+    margin-bottom: 5px;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.link + .link {
+    padding-left: 30px;
+}
