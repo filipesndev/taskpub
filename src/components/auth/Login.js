@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { useState } from 'react'
 import css from './Login.module.css'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import axios from '../../config/index'
 
 const initialData = {
@@ -13,6 +13,7 @@ const initialData = {
 function Login(props) {
 
     const [data, setData] = useState(initialData)
+    const history = useHistory()
 
     const onChange = e => {
         const name = e.target.name
@@ -43,6 +44,7 @@ function Login(props) {
             }
             const resp = await axios.post('/auth/login', data)
             localStorage.setItem('userToken', resp.data.token)
+            history.push("/dashboard")
         } catch (error) {
             alert('Login não pode ser efetuado.')
             console.log(error)

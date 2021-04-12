@@ -12,6 +12,8 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from './components/auth/PrivateRoute'
 import App from './components/App';
 
+
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
@@ -20,7 +22,7 @@ ReactDOM.render(
         <Route path="/register" component={Register} />
         <Route path="/password" component={Password} />
         <Route path="/404" component={Perdido} />
-        <PrivateRoute path="/" component={App} exact/>
+        <PrivateRoute path="/" component={App} />
         <Redirect to="/404"/>
       </Switch>
     </BrowserRouter>

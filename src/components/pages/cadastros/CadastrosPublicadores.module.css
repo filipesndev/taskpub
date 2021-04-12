@@ -1,0 +1,27 @@
+.CadPublicador {
+    padding: 20px;
+}
+
+.CadPublicador label {
+    font-weight: 500;
+}
+
+.privilegios {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formBtn {
+    display: block;
+    text-align: end;
+    padding: 8px 11px 0px 0px;
+}
+
+.formBtn button + button {
+    margin-left: 10px;
+}
+
+.formBtn i {
+    margin-right: 8px;
+}

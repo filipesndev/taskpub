@@ -6,6 +6,16 @@
     justify-content: center;
 }
 
+.login a {
+    color: rgb(0, 140, 255);
+    font-weight: 300;
+}
+
+.login a:hover {
+    color: rgb(64, 169, 255);
+    font-weight: 300;
+}
+
 .box {
     border: solid 1px rgb(200, 200, 200);
     border-radius: 20px;

@@ -1,7 +1,11 @@
-function Header(props) {
+import css from './Footer.module.css'
+
+function Footer(props) {
     return (
-        <h1>Header</h1>
+        <div className={css.footer}>
+            <h1>©TaskPub, é um sistema criado para treinamento por <a href="https://github.com/filipesndev">Filipe Eduardo</a>.</h1>
+        </div>
     )
 }
 
-export default Header
+export default Footer

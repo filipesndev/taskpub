@@ -1,0 +1,107 @@
+.cadastro {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: white;
+    overflow: scroll;
+}
+
+.selectInput {
+    width: 30%;
+}
+
+.selectInput > label {
+    margin-bottom: 5px;
+}
+
+.topCad {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 0px 10px 0px;
+    padding: 20px 20px 0px 20px;
+}
+
+.topCad .search {
+    max-width: 35%;
+    margin-top: 10px;
+}
+
+.topCad > h1 {
+    font-size: 35px;
+    font-weight: 300;
+}
+
+.topCad button i {
+    margin-right: 8px;
+}
+
+.tabelaCad {
+    padding: 0px 20px 20px 20px;
+}
+
+.tabela {
+    border: solid 2px rgb(0, 0, 0, 0.2);
+}
+
+.tabela th {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.ulPrivilegios{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.ulPrivilegios li {
+    margin: 0px 5px 0px 5px;
+}
+
+.tabela tr {
+    font-size: 17px;
+    font-weight: 300;
+}
+
+.tabela td {
+    padding: 10px 5px 10px 5px;
+}
+
+.tabela thead{
+    background-color: #0d6dfd;
+    color: whitesmoke;
+}
+
+.tdId {
+    text-align: center;
+}
+
+.tdIcon {
+    text-align: center;
+}
+
+.tdBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tdBtn button + button {
+    margin-left: 15px;
+}
+
+.iconCheck {
+    color: rgb(80, 160, 0);
+}
+
+.iconTimes {
+    color: rgb(207, 0, 0);
+}
+
+.iconTrash {
+    color: black;
+}

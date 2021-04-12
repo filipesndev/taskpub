@@ -6,6 +6,16 @@
     justify-content: center;
 }
 
+.register a {
+    color: rgb(0, 140, 255);
+    font-weight: 300;
+}
+
+.register a:hover {
+    color: rgb(64, 169, 255);
+    font-weight: 300;
+}
+
 .box {
     width: 290px;
     border: solid 1px rgb(200, 199, 199);

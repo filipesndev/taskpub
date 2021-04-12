@@ -1,0 +1,94 @@
+.sidebar {
+    background-color: rgb(31, 31, 31);
+    color: whitesmoke;
+    width: 300px;
+    height: 100vh;
+    padding: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-left: -300px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.active {
+    margin-left: 0;
+}
+
+a {
+    text-decoration: none;
+    color: whitesmoke;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: rgb(126, 219, 255);
+    font-weight: 300;
+    transition: all 0.2s;
+}
+
+.mainH1 {
+    font-size: 50px;
+    font-weight: 200;
+    margin-top: 15px;
+    text-align: center;
+    border-bottom: solid 1px rgb(200, 200, 200);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.subMenu {
+    padding: 0px 20px 0px 0px;
+}
+
+.subMenuH1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.subMenuH1 i {
+    font-size: 20px;
+    align-self: center;
+    justify-self: end;
+    padding-bottom: 5px;
+    padding-right: 13px;
+    transition: all 0.5s;
+}
+
+.rotate {
+    transform: rotate(90deg);
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    margin-bottom: 20px;
+}
+
+.subMenu h1 {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.subMenu li {
+    list-style: none;
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.subMenu li + li {
+    margin-top: 10px;
+}
+
+.subMenu ul {
+    max-height: 0;
+    overflow-y: hidden;
+    border-right: solid 1px whitesmoke;
+    margin-right: 8px;
+    transition: all 0.3s;
+}

@@ -1,0 +1,82 @@
+.modalBackground {
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100vw;
+    z-index: 5;
+}
+
+.modalBox {
+    width: 40%;
+    border: 2px solid rgb(0, 0, 0, 0.5);
+    border-radius: 15px;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    z-index: 6;
+    opacity: 0;
+    transform: scale(0.5);
+    -webkit-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    transition: all 0.3s;
+}
+
+.active {
+    opacity: 1;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    top: 20%;
+}
+
+.modalBox h1 {
+    color: whitesmoke;
+    background-color: #0d6dfd;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    margin: 0;
+    padding: 18px 18px 18px 24px;
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.modalBox form {
+    background-color: whitesmoke;
+    padding: 20px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.modalBoxCheck {
+    width: 100%;
+    display: flex;
+}
+
+.modalBoxDropdown {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modalBoxCheck > div + div {
+    margin-left: 20px;
+}
+
+.modalBox form input {
+    margin-bottom: 10px;
+}
+
+.modalBoxBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modalBox form button + button {
+    margin-left: 8px;
+}
+
+.modalBox form button i {
+    margin-right: 8px;
+}
