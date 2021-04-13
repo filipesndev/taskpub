@@ -3,12 +3,24 @@ import clsx from 'clsx'
 import AddReuniao from './AddReuniao'
 import { useState, useEffect } from 'react'
 import axios from '../../../config/index'
+import Swal from 'sweetalert2'
+
+const tipoReuniao = {
+    FS: 'Fim de Semana',
+    MS: 'Meio de Semana',
+    CE: 'Celebração',
+    RE: 'Reunião Especial'
+}
 
 function Reuniao(props) {
 
     const [modal, setModal] = useState(false)
     const [list, setList] = useState([])
-    const [ano, setAno] = useState(0)
+    const [ano, setAno] = useState('2021')
+    const [totais, setTotais] = useState({})
+    const [medias, setMedias] = useState({})
+    const [refresh, setRefresh] = useState(false)
+    const [reuniaoId, setReuniaoId] = useState(false)
 
     const novaReuniao = e => {
         setModal(true)
@@ -16,6 +28,27 @@ function Reuniao(props) {
 
     const yearChange = e => {
         setAno(e.target.value)
+    }
+
+    const delReuniao = async (id) => {
+        const result = await Swal.fire({
+            title: 'Deletar Reunião?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar'
+        })
+        if (result.isConfirmed) {
+            await axios.delete('/reunioes/' + id )
+            setRefresh(true)
+        }
+    }
+
+    const editReuniao = (id) => {
+        setModal(true)
+        setReuniaoId(id)
     }
 
     useEffect(() => {
@@ -26,13 +59,31 @@ function Reuniao(props) {
             }
             const resp = await axios.get('/reunioes', { params })
             setList(resp.data.data)
+            const totais = {
+                MS: 0,
+                FS: 0,
+            }
+            const quant = {
+                MS: 0,
+                FS: 0
+            }
+            resp.data.data.forEach(reuniao => {
+                totais[reuniao.tipo] = totais[reuniao.tipo] + reuniao.assistencia
+                quant[reuniao.tipo] = quant[reuniao.tipo] + 1
+            });
+            setTotais(totais)
+            setMedias({
+                MS: totais.MS / quant.MS,
+                FS: totais.FS / quant.FS
+            })
             console.log(resp.data.data)
         }
         loadReuniao()
-    }, [ano])
+    }, [ano, modal, refresh])
 
     return (
         <div className={css.reuniao}>
+            <h1>Assistencia das reuniões</h1>
             <div className={css.reuniaoTop}>
                 <div>
                     <label htmlFor="yearSel">Selecionar ano:</label>
@@ -48,31 +99,37 @@ function Reuniao(props) {
             </div>
 
             {
-                modal && <AddReuniao modal={modal} setModal={setModal} />
+                modal && <AddReuniao modal={modal} setModal={setModal} reuniaoId={reuniaoId}/>
             }
 
             <div className={css.reuniaoMiddle}>
                 <div className={css.tabelaReuniao}>
                     <table className={'table table-striped table-bordered table-hover ' + css.tabela}>
-                    <thead>
-                        <tr>
-                            <th scope="col">Data</th>
-                            <th scope="col">Reunião</th>
-                            <th scope="col">Assistência</th>
-                            <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className={css.date}>10/10/10</td>
-                            <td className={css.date}>Meio</td>
-                            <td className={css.ass}>180</td>
-                            <td className={css.action}>
-                                <button className="btn btn-warning"><i className="fas fa-edit"></i></button>
-                                <button className="btn btn-danger"><i className={'fas fa-trash ' + css.iconTrash}></i></button>     
-                            </td>
-                        </tr>
-                    </tbody>
+                        <thead>
+                            <tr>
+                                <th scope="col">Data</th>
+                                <th scope="col">Reunião</th>
+                                <th scope="col">Assistência</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                list.map( (item) => {
+                                    return (
+                                        <tr key={item.id}>
+                                            <td className={css.date}>{item.data_reuniao.substr(0,10)}</td>
+                                            <td className={css.date}>{tipoReuniao[item.tipo]}</td>
+                                            <td className={css.ass}>{item.assistencia}</td>
+                                            <td className={css.action}>
+                                                <button onClick={ e => editReuniao(item.id)} className="btn btn-warning"><i className="fas fa-edit"></i></button>
+                                                <button onClick={ e => delReuniao(item.id)} className="btn btn-danger"><i className={'fas fa-trash ' + css.iconTrash}></i></button>     
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -80,22 +137,22 @@ function Reuniao(props) {
             <div className={css.reuniaoBottom}>
                 <div className={clsx('card', css.cardBottom, css.cb1)}>
                     <div className="card-body">
-                        Total Meio de Semana: 12345
+                        Total Meio de Semana: {totais.MS || 0}
                     </div>
                 </div>
                 <div className={clsx('card', css.cardBottom, css.cb2)}>
                     <div className="card-body">
-                        Média Meio de Semana: 12345
+                        Média Meio de Semana: {parseInt( medias.MS ) || 0}
                     </div>
                 </div>
                 <div className={clsx('card', css.cardBottom, css.cb3)}>
                     <div className="card-body">
-                        Total Fim de Semana: 12345
+                        Total Fim de Semana: {totais.FS || 0}
                     </div>
                 </div>
                 <div className={clsx('card', css.cardBottom, css.cb4)}>
                     <div className="card-body">
-                        Média Fim de Semana: 12345
+                        Média Fim de Semana: {parseInt( medias.FS ) || 0}
                     </div>
                 </div>
             </div>
