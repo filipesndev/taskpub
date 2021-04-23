@@ -3,27 +3,63 @@ import { useState, useEffect } from 'react'
 import axios from '../../../config/index'
 import Swal from 'sweetalert2'
 import AdicionarUser from './AdicionarUser'
+import Pagination from '../../layout/Pagination'
 
 
 function Users(props) {
 
-    const [modal, setModal] = useState(false)
-    const [list, setList] = useState([])
-    const [userId, setUserId] = useState(null)
+    const [state, setState] = useState({
+        modal: false,
+        list: [],
+        userId: null,
+        totalPages: 0,
+        page: 1,
+        sidePages: 1,
+        search: '',
+        refresh: true
+    })
+
+    const onSearchChange = e => {
+        const { value } = e.target
+        setState(state => ({
+            ...state,
+            search: value,
+            refresh: !value,
+            page: 1
+        }))
+    }
+    
+    const onClickSearch = e => {
+        setState(state => ({
+            ...state,
+            page: 1,
+            refresh: true
+        }))
+    }
+
+    const changePage = page => {
+        setState(state => ({
+            ...state,
+            page,
+            refresh: true
+        }))
+    }
+
+    const closeModal = e => {
+        setState({
+            ...state,
+            modal: false,
+            refresh: true
+        })
+    }
 
     const novoUsuario = e => {
-        setModal(true)
-        setUserId(null)
+        setState({
+            ...state,
+            modal: true,
+            userUd: null
+        })
     }
-
-    const loadUsers = async (e) => {
-        const resp = await axios.get('/usuarios')
-        setList(resp.data.data)
-    }
-
-    useEffect(() => {
-        loadUsers()
-    }, [])
 
     const delUser = async (id) => {
         const result = await Swal.fire({
@@ -38,29 +74,56 @@ function Users(props) {
 
         if (result.isConfirmed) {
             await axios.delete('/usuarios/' + id )
-            loadUsers()
+            setState({
+                ...state,
+                refresh: true
+            })
         }
     }
 
     const editUser = (id) => {
-        setModal(true)
-        setUserId(id)
+        setState({
+            ...state,
+            modal: true,
+            userUd: id
+        })
     }
 
+    useEffect(() => {
+        const loadUsers = async (e) => {
+            const params = {
+                page: state.page,
+                limit: 10,
+                search: state.search,
+                order: 'username'
+            }
+            const resp = await axios.get('/usuarios', { params })
+            setState({
+                ...state,
+                list: resp.data.data,
+                totalPages: resp.data.lastPage,
+                page: resp.data.page,
+                refresh: false
+            })
+        }
+        if (state.refresh) {
+            loadUsers()
+        }
+    }, [state])
 
     return (
         <div className={css.cadastro}>
 
             {
-                modal && <AdicionarUser modal={modal} setModal={setModal} loadUsers={loadUsers} userId={userId}/>
+                state.modal && <AdicionarUser closeModal={closeModal} userId={state.userId}/>
             }
 
             <div className={css.topCad}>
                 <h1>Cadastro de Usuários:</h1>
                 <div className={'input-group mb-3 ' + css.search}>
-                    <input type="text" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
+                    <input onChange={onSearchChange} type="search" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
                     <div className="input-group-append">
-                        <button className="btn btn-primary" type="button" id="button-addon2"><i className="fas fa-search"></i></button>
+                        <button onClick={onClickSearch} disabled={!state.search} className="btn btn-primary" type="button" id="button-addon2"><i className="fas fa-search"></i></button>
                     </div>
                 </div>
                 <button onClick={ novoUsuario } type="button" className="btn btn-success"><i className="fas fa-plus"></i>Adicionar Novo</button>
@@ -78,7 +141,7 @@ function Users(props) {
                 </thead>
                 <tbody>
                     {
-                        list.map( (user) => {
+                        state.list.map( (user) => {
                             return (
                                 <tr key={user.id}>
                                     <td className={css.tdId}>{user.id}</td>
@@ -95,6 +158,14 @@ function Users(props) {
                     }
                 </tbody>
                 </table>
+                <div className={css.pageSelect}>
+                    <Pagination 
+                            totalPages={state.totalPages}
+                            page={state.page}
+                            sidePages={state.sidePages}
+                            onPageChange={changePage}
+                        />
+                </div>
             </div>
         </div>
     )

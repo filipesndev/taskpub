@@ -42,7 +42,7 @@ function Reuniao(props) {
         })
         if (result.isConfirmed) {
             await axios.delete('/reunioes/' + id )
-            setRefresh(true)
+            refresh === true ? setRefresh(false) : setRefresh(true)
         }
     }
 
@@ -118,7 +118,7 @@ function Reuniao(props) {
                                 list.map( (item) => {
                                     return (
                                         <tr key={item.id}>
-                                            <td className={css.date}>{item.data_reuniao.substr(0,10)}</td>
+                                            <td className={css.date}>{new Date(item.data_reuniao).toLocaleDateString()}</td>
                                             <td className={css.date}>{tipoReuniao[item.tipo]}</td>
                                             <td className={css.ass}>{item.assistencia}</td>
                                             <td className={css.action}>

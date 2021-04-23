@@ -3,32 +3,69 @@ import { Link, useHistory } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from '../../../config/index'
 import Swal from 'sweetalert2'
+import Pagination from '../../layout/Pagination'
 
 const urlCadastro = '/cadastros/publicadores/cadastrar'
 
 function Users(props) {
 
-    const [list, setList] = useState([])
     const history = useHistory()
-    const [search, setSearch] = useState('')
+    const [state, setState] = useState({
+        list: [],
+        totalPages: 0,
+        page: 1,
+        sidePages: 1,
+        search: '',
+        refresh: true
+    })
 
-    const onSearch = e => {
-        setSearch(e.target.value)
+    const onSearchChange = e => {
+        const { value } = e.target
+        setState(state => ({
+            ...state,
+            search: value,
+            refresh: !value,
+            page: 1
+        }))
+    }
+    
+    const onClickSearch = e => {
+        setState(state => ({
+            ...state,
+            page: 1,
+            refresh: true
+        }))
     }
 
-    const searchSubmit = e => {
-        e.preventDefault()
-        
-    }
-
-    const loadPublicadores = async (e) => {
-        const resp = await axios.get('/publicadores')
-        setList(resp.data.data)
+    const changePage = page => {
+        setState(state => ({
+            ...state,
+            page,
+            refresh: true
+        }))
     }
 
     useEffect(() => {
-        loadPublicadores()
-    }, [])
+        const loadPublicadores = async (e) => {
+            const params = {
+                page: state.page,
+                limit: 10,
+                search: state.search,
+                order: 'nome'
+            }
+            const resp = await axios.get('/publicadores', { params })
+            setState(state => ({
+                ...state,
+                list: resp.data.data,
+                totalPages: resp.data.lastPage,
+                page: resp.data.page,
+                refresh: false
+            }))
+        }
+        if (state.refresh) {
+            loadPublicadores()
+        }
+    }, [state])
 
     const privilegios = (publicador) => {
         return (
@@ -57,8 +94,18 @@ function Users(props) {
         })
 
         if (result.isConfirmed) {
-            await axios.delete('/publicadores/' + id )
-            loadPublicadores()
+            try {
+                await axios.delete('/publicadores/' + id )
+            } catch (error) {
+                await Swal.fire({
+                    title: 'Não foi possivel excluir o publicador.',
+                    icon: 'error',
+                })
+            }
+            setState({
+                ...state,
+                refresh: true
+            })
         }
     }
 
@@ -68,10 +115,10 @@ function Users(props) {
 
             <div className={css.topCad}>
                 <h1>Cadastro de Publicadores:</h1>
-                <form onSubmit={searchSubmit} className={'input-group mb-3 ' + css.search}>
-                    <input onChange={onSearch} type="text" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
-                    <button className="btn btn-primary" type="submit" id="button-addon2"><i className="fas fa-search"></i></button>
-                </form>
+                <div className={'input-group mb-3 ' + css.search}>
+                    <input onChange={onSearchChange} type="search" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
+                    <button onClick={onClickSearch} disabled={!state.search} className="btn btn-primary" type="buttom" id="button-addon2"><i className="fas fa-search"></i></button>
+                </div>
                 <Link to={urlCadastro}><button type="button" className="btn btn-success"><i className="fas fa-plus"></i>Adicionar Novo</button></Link>
             </div>
             <div className={css.tabelaCad}>
@@ -89,7 +136,7 @@ function Users(props) {
                 </thead>
                 <tbody>
                     {
-                        list.map ( (publicador) => {
+                        state.list.map ( (publicador) => {
                             return (
                                 <tr key={publicador.id}>
                                     <td className={css.tdId}>{publicador.id}</td>
@@ -109,6 +156,14 @@ function Users(props) {
                     }
                 </tbody>
                 </table>
+                <div className={css.pageSelect}>
+                    <Pagination 
+                            totalPages={state.totalPages}
+                            page={state.page}
+                            sidePages={state.sidePages}
+                            onPageChange={changePage}
+                        />
+                </div>
             </div>
         </div>
     )

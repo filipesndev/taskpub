@@ -94,6 +94,17 @@
     margin-left: 15px;
 }
 
+.pageSelect {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.pageSelect a{
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
 .iconCheck {
     color: rgb(80, 160, 0);
 }

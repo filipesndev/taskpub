@@ -8,11 +8,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import './index.css';
+import { setDefaultLocale } from  "react-datepicker";
+import pt from 'date-fns/locale/pt-BR';
+import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from './components/auth/PrivateRoute'
 import App from './components/App';
 
-
+setDefaultLocale(pt)
 
 ReactDOM.render(
   <React.StrictMode>

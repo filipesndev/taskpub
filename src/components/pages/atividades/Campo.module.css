@@ -2,6 +2,12 @@
 
 .campo {
     width: 100%;
+    position: relative;
+}
+
+.campo > h1 {
+    font-weight: 300;
+    padding: 20px 0px 0px 30px;
 }
 
 .campoTop {
@@ -10,10 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.campoTop h1 {
-    font-weight: 300;
 }
 
 .campoTop form {
@@ -26,16 +28,39 @@
     align-items: center;
 }
 
+.datePicker {
+    display: flex;
+    flex-direction: column;
+}
+
+.datePicker input {
+    display: block;
+    width: 100%;
+    padding: .375rem 2.25rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+}
+
 .campoTop i {
     margin-right: 10px;
 }
 
-.campoTop form div + div {
-    margin-left: 15px;
+.campoTopSel {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
-.campoTop form button {
-    margin-top: 20px;
+.campoTopBtn {
+    margin: 21px 0px 0px 0px;
 }
 
 .iconTrash {

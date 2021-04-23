@@ -71,16 +71,7 @@ function Sidebar(props) {
                         <h1>Relatórios</h1><i className={ (opMenu3 ? css.rotate : null) + ' fas fa-chevron-right'} ></i>
                     </div>
                     <ul ref={refMenu3}>
-                        <li>Opção 1</li>
-                        <li>Opção 2</li>
-                        <li>Opção 3</li>
-                        <li>Opção 4</li>
-                        <li>Opção 5</li>
-                        <li>Opção 6</li>
-                        <li>Opção 7</li>
-                        <li>Opção 8</li>
-                        <li>Opção 9</li>
-                        <li>Opção 10</li>
+                        
                     </ul>
                 </li>
             </ul>

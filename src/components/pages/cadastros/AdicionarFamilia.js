@@ -33,8 +33,7 @@ function AdicionarFamilia(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)           
-                props.loadFamilias()
+                props.setModal(false)
             } else {
                 await axios.post('/familias', data)
                 Swal.fire({
@@ -44,8 +43,7 @@ function AdicionarFamilia(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)           
-                props.loadFamilias()
+                props.setModal(false)
             }
         } catch (error) {
             alert('Não foi possivel cadastrar a família')

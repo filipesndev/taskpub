@@ -3,6 +3,7 @@ import css from './AddReuniao.module.css'
 import clsx from 'clsx'
 import axios from '../../../config/index'
 import Swal from 'sweetalert2'
+import DatePicker from 'react-datepicker'
 
 const initialData = {
     tipo: '',
@@ -68,7 +69,8 @@ function AddReuniao(props) {
             try {
                 const resp = await axios.get('/reunioes/' + props.reuniaoId)
                 setData({
-                    ...resp.data
+                    ...resp.data,
+                    data_reuniao: new Date(resp.data.data_reuniao)
                 })
             } catch (error) {
                 console.log(error)
@@ -83,7 +85,8 @@ function AddReuniao(props) {
     }, [props.reuniaoId])
 
     return (
-        <div className={css.background}>
+        <>
+            <div onClick={closeModal} className={css.background}></div>
             <div className={clsx(css.modal, active && css.active)}>
                 <div className={css.modalTop}>
                     <h1>Incluir Assistencia</h1>
@@ -92,7 +95,14 @@ function AddReuniao(props) {
                     <form onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="dataReu">Data</label>
-                            <input onChange={onChange} name="data_reuniao" value={data.data_reuniao} className="form-control" type="date" id="dataReu"/>
+                            <DatePicker
+                                selected={data.data_reuniao}
+                                onChange={date => setData({
+                                    ...data,
+                                    data_reuniao: date
+                                })}
+                                dateFormat="dd/MM/yyyy"
+                            />
                         </div>
                         <div>
                             <label htmlFor="reuniao">Reunião</label>
@@ -115,7 +125,8 @@ function AddReuniao(props) {
                     </form>
                 </div>
             </div>
-        </div>
+        </>
+        
     )
 }
 

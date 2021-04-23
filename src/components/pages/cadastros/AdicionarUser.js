@@ -46,8 +46,7 @@ function AdicionarUser(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)           
-                props.loadUsers()
+                props.closeModal()
             } else {
                 await axios.post('/usuarios', data)
                 Swal.fire({
@@ -57,8 +56,7 @@ function AdicionarUser(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)           
-                props.loadUsers()
+                props.closeModal()
             }
         } catch (error) {
             alert('Não foi possivel cadastrar o usuário')
@@ -93,7 +91,7 @@ function AdicionarUser(props) {
 
     return (
         <>
-            <div onClick={ e => props.setModal(false) } className={css.modalBackground}></div>
+            <div onClick={ e => props.closeModal() } className={css.modalBackground}></div>
             <div className={css.modalBox + ' ' + ( active ? css.active : '')}>
                 <h1>Adicionar Usuário</h1>
                 <form onSubmit={handleSubmit}>
@@ -107,7 +105,7 @@ function AdicionarUser(props) {
                         </div>
                     </div>
                     <div className={css.modalBoxBtn}>
-                        <button onClick={ e => props.setModal(false) } type="button" className="btn btn-danger"><i className="fas fa-times"></i>Cancelar</button>
+                        <button onClick={ e => props.closeModal() } type="button" className="btn btn-danger"><i className="fas fa-times"></i>Cancelar</button>
                         <button type="submit" className="btn btn-success"><i className="fas fa-check"></i>Salvar</button>
                     </div>
                 </form>

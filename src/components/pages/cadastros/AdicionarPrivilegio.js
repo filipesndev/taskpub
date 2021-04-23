@@ -33,8 +33,7 @@ function AdicionarPrivilegio(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)
-                props.loadPrivilegios()
+                props.closeModal()
             } else {
                 await axios.post('/privilegios', data)
                 Swal.fire({
@@ -44,19 +43,14 @@ function AdicionarPrivilegio(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.setModal(false)
-                props.loadPrivilegios()
+                props.closeModal()
             }
         } catch (error) {
             alert('Não foi possivel adicionar o privilégio')
             console.log(error)
         }
     }
-
-    useEffect(() => {
-        setActive(true)
-    }, [])
-
+    
     useEffect(() => {
         const loadPriv = async () => {
             try {
@@ -74,16 +68,20 @@ function AdicionarPrivilegio(props) {
             setData(initialData)
         }
     }, [props.privId])
+    
+    useEffect(() => {
+        setActive(true)
+    }, [])
 
     return (
         <>
-            <div onClick={ e => props.setModal(false) } className={css.modalBackground}></div>
+            <div onClick={ e => props.closeModal() } className={css.modalBackground}></div>
             <div className={css.modalBox + ' ' + (active ? css.active : '' ) }>
                 <h1>Adicionar Privilégio</h1>
                 <form onSubmit={handleSubmit}>
                     <input onChange={onChange} name="descricao" value={data.descricao} type="text" className="form-control" placeholder="Nome" />
                     <div className={css.modalBoxBtn}>
-                        <button onClick={ e => props.setModal(false) } type="button" className="btn btn-danger"><i className="fas fa-times"></i>Cancelar</button>
+                        <button onClick={ e => props.closeModal() } type="button" className="btn btn-danger"><i className="fas fa-times"></i>Cancelar</button>
                         <button type="submit" className="btn btn-success"><i className="fas fa-check"></i>Salvar</button>
                     </div>
                 </form>

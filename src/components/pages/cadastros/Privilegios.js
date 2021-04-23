@@ -3,28 +3,55 @@ import { useState, useEffect } from 'react'
 import axios from '../../../config/index'
 import Swal from 'sweetalert2'
 import AdicionarPrivilegio from './AdicionarPrivilegio'
-
+import Pagination from '../../layout/Pagination'
 
 
 function Privilegios(props) {
 
-    const [modal, setModal] = useState(false)
-    const [list, setList] = useState([])
-    const [privId, setPrivId] = useState(null)
+    const [state, setState] = useState({
+        modal: false,
+        list: [],
+        privId: null,
+        totalPages: 0,
+        page: 1,
+        sidePages: 1,
+        search: '',
+        refresh: true
+    })
+
+    const onSearchChange = e => {
+        const { value } = e.target
+        setState(state => ({
+            ...state,
+            search: value,
+            refresh: !value,
+            page: 1
+        }))
+    }
+    
+    const onClickSearch = e => {
+        setState(state => ({
+            ...state,
+            page: 1,
+            refresh: true
+        }))
+    }
+
+    const closeModal = e => {
+        setState({
+            ...state,
+            modal: false,
+            refresh: true
+        })
+    }
 
     const novoPrivilegio = e => {
-        setModal(true)
-        setPrivId(null)
+        setState({
+            ...state,
+            modal: true,
+            privId: null
+        })
     }
-
-    const loadPrivilegios = async (e) => {
-        const resp = await axios.get('/privilegios')
-        setList(resp.data.data)
-    }
-
-    useEffect(() => {
-        loadPrivilegios()
-    }, [])
 
     const delPrivilegio = async (id) => {
         const result = await Swal.fire({
@@ -39,28 +66,64 @@ function Privilegios(props) {
 
         if (result.isConfirmed) {
             await axios.delete('/privilegios/' + id )
-            loadPrivilegios()
+            setState({
+                ...state,
+                refresh: true
+            })
         }
     }
 
     const editPrivlegio = (id) => {
-        setModal(true)
-        setPrivId(id)
+        setState({
+            ...state,
+            modal: true,
+            privId: id
+        })
     }
+
+    const changePage = page => {
+        setState(state => ({
+            ...state,
+            page,
+            refresh: true
+        }))
+    }
+
+    useEffect(() => {
+        const loadPrivilegios = async (e) => {
+            const params = {
+                page: state.page,
+                limit: 10,
+                search: state.search,
+                order: 'descricao'
+            }
+            const resp = await axios.get('/privilegios', { params })
+            setState({
+                ...state,
+                list: resp.data.data,
+                totalPages: resp.data.lastPage,
+                page: resp.data.page,
+                refresh: false
+            })
+        }
+        if (state.refresh) {
+            loadPrivilegios()
+        }
+    }, [state])
 
     return (
         <div className={css.cadastro}>
 
             {
-                modal && <AdicionarPrivilegio setModal={setModal} modal={modal} loadPrivilegios={loadPrivilegios} privId={privId}/>
+                state.modal && <AdicionarPrivilegio closeModal={closeModal} privId={state.privId}/>
             }
 
             <div className={css.topCad}>
                 <h1>Cadastro de Privilégios:</h1>
                 <div className={'input-group mb-3 ' + css.search}>
-                    <input type="text" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
+                    <input onChange={onSearchChange} type="search" className="form-control" placeholder="Buscar..." aria-label="Procurar por nome" aria-describedby="button-addon2"/>
                     <div className="input-group-append">
-                        <button className="btn btn-primary" type="button" id="button-addon2"><i className="fas fa-search"></i></button>
+                        <button onClick={onClickSearch} className="btn btn-primary" disabled={!state.search}  type="button" id="button-addon2"><i className="fas fa-search"></i></button>
                     </div>
                 </div>
                 <button onClick={ novoPrivilegio } type="button" className="btn btn-success"><i className="fas fa-plus"></i>Adicionar Novo</button>
@@ -76,7 +139,7 @@ function Privilegios(props) {
                 </thead>
                 <tbody>
                     {
-                        list.map( (privilegio) => {
+                        state.list.map( (privilegio) => {
                             return (
                                 <tr key={privilegio.id}>
                                     <td className={css.tdId}>{privilegio.id}</td>
@@ -91,6 +154,14 @@ function Privilegios(props) {
                     }
                 </tbody>
                 </table>
+                <div className={css.pageSelect}>
+                    <Pagination 
+                            totalPages={state.totalPages}
+                            page={state.page}
+                            sidePages={state.sidePages}
+                            onPageChange={changePage}
+                        />
+                </div>
             </div>
         </div>
     )
