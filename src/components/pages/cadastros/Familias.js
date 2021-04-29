@@ -72,7 +72,14 @@ function Familias(props) {
         })
 
         if (result.isConfirmed) {
-            await axios.delete('/familias/' + id )
+            try {
+                await axios.delete('/familias/' + id )
+            } catch (error) {
+                await Swal.fire({
+                    title: 'Não foi possivel excluir a família.',
+                    icon: 'error',
+                })
+            }
             setState(state => ({
                 ...state,
                 refresh: true

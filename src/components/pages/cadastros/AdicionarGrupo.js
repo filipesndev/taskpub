@@ -33,8 +33,7 @@ function AdicionarGrupo(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.closeModal()          
-                props.loadGrupos()
+                props.closeModal()
             } else {
                 await axios.post('/grupos_campo', data)
                 Swal.fire({
@@ -44,8 +43,7 @@ function AdicionarGrupo(props) {
                     showConfirmButton: false,
                     timer: 1200
                 })
-                props.closeModal()          
-                props.loadGrupos()
+                props.closeModal()
             }
         } catch (error) {
             alert('Não foi possivel cadastrar o grupo')

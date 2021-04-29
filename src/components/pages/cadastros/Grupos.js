@@ -72,7 +72,14 @@ function Grupos(props) {
         })
 
         if (result.isConfirmed) {
-            await axios.delete('/grupos_campo/' + id )
+            try {
+                await axios.delete('/grupos_campo/' + id )
+            } catch (error) {
+                await Swal.fire({
+                    title: 'Não foi possivel excluir o publicador.',
+                    icon: 'error',
+                })
+            }
             setState({
                 ...state,
                 refresh: true
